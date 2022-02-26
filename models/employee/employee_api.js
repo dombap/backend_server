@@ -37,8 +37,8 @@ var employee = {
       pool.getConnection(function (err, conn) {   
         console.log('req----',req); 
         if (err) res.status(400);
-        var email = req.query.email;
-        var password = req.query.password;
+        var email = req.body.email;
+        var password = req.body.password;
         var paramsArray = [email,password];
         console.log('req.query----',req.query);
         console.log('req.body---',req.body);

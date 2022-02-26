@@ -19,21 +19,16 @@ var ticket = {
     });
   },
   addTicket: function (req, res) {
-    pool.getConnection(function (err, conn) {    
+    pool.getConnection(function (err, conn) {  
+      console.log(' req.body.----', req.body);  
       if (err) res.status(400);
-      var subject = req.body.short_description;
-      var description = req.body.description;
-      var priority = req.body.priority;
-      var group = req.body.assignment_group;
-      var category = req.body.category;
-      var assignedBy = req.body.opened_by;
-      var assignedTo = req.body.assigned_to;
-      var status = req.body.state;
+      var createdBy = req.body.createdBy;
+      var createdFor= req.body.createdFor;
+      var category= req.body.category;
+      var desc= req.body.desc;
       var createdOn = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-      var impactedUser = req.body.impacted_user;
-
-      var paramsArray = [subject,description,priority,group,category,assignedBy,assignedTo,createdOn,status,impactedUser];
-      var sql = " INSERT INTO ticket_details (created_by,created_for,category,desc) VALUES(?,?,?,?)"
+      var paramsArray = [createdBy,createdFor,category,desc,createdOn];
+      var sql = " INSERT INTO ticket_details (created_by,created_for,category,description,created_on) VALUES(?,?,?,?,?)"
       conn.query(sql, paramsArray, function (err, rows) {
         if (err) {
           res.status(400).json(err);
