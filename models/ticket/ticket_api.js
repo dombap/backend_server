@@ -8,7 +8,7 @@ var ticket = {
     pool.getConnection(function (err, conn) {
       if (err) res.status(400);
       // var case_id = req.query.case;
-      var sql = "select * from ticket_details";
+      var sql = "SELECT td.id,td.description,ed.firstName AS created_by,ed1.firstName AS created_for,cat.name FROM ticket_details AS td JOIN emp_details AS ed ON td.created_by = ed.id JOIN emp_details AS ed1 ON td.created_for = ed1.id JOIN category AS cat ON td.category = cat.id";
       conn.query(sql,function (err, rows) {
         if (err) {
           res.status(400).json(err);
