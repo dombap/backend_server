@@ -7,4 +7,10 @@ module.exports = function (app, database) {
   app.post('/addticket', function (req, res) {
     ticket.addTicket(req, res);
   });
+  app.post('/delticket', function (req, res) {
+    ticket.deleteTicket(req, res);
+  });
+  app.put('/updateticket', function (req, res) {
+    ticket.updateTicket(req, res);
+  });
 };
