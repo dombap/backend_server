@@ -8,7 +8,7 @@ var ticket = {
     pool.getConnection(function (err, conn) {
       if (err) res.status(400);
       // var case_id = req.query.case;
-      var sql = "SELECT td.id,td.description,ed.id AS created_by_id,ed1.id AS created_for_id,cat.id AS category_id,ed.firstName AS created_by,ed1.firstName AS created_for,cat.name FROM ticket_details AS td JOIN emp_details AS ed ON td.created_by = ed.id JOIN emp_details AS ed1 ON td.created_for = ed1.id JOIN category AS cat ON td.category = cat.id";
+      var sql = "SELECT td.id,td.assign_to,td.description,ed.id AS created_by_id,ed1.id AS created_for_id,cat.id AS category_id,ed.firstName AS created_by,ed1.firstName AS created_for,cat.name FROM ticket_details AS td JOIN emp_details AS ed ON td.created_by = ed.id JOIN emp_details AS ed1 ON td.created_for = ed1.id JOIN category AS cat ON td.category = cat.id";
       conn.query(sql,function (err, rows) {
         if (err) {
           res.status(400).json(err);
@@ -74,6 +74,39 @@ pool.getConnection(function (err, conn) {
     }
   });
 })
+},
+updateAssignee: function (req, res) {
+  console.log(' req.body----', req.body);
+pool.getConnection(function (err, conn) {    
+  if (err) res.status(400);
+  var assignee = req.body.assignTo.id;
+  var id = req.body.id;
+  var paramsArray = [assignee,id];
+  console.log('paramsArray----',paramsArray);
+  
+  var sql = "UPDATE ticket_details SET `assign_to`=? WHERE `id`=?";
+  conn.query(sql, paramsArray, function (err, rows) {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      res.status(200).json(rows);
+    }
+  });
+})
+},
+getAssignee: function (req, res) {
+  pool.getConnection(function (err, conn) {
+    if (err) res.status(400);
+    var id = req.body.selectedId;
+    var sql = "SELECT td.assign_to, ed.firstName,ed.lastName  FROM ticket_details AS td JOIN emp_details AS ed ON td.assign_to = ed.id WHERE td.id = ?";
+    conn.query(sql,[id],function (err, rows) {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        res.status(200).json(rows);
+      }
+    });
+  });
 }
 };
 module.exports = ticket;

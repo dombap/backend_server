@@ -13,4 +13,10 @@ module.exports = function (app, database) {
   app.put('/updateticket', function (req, res) {
     ticket.updateTicket(req, res);
   });
+  app.put('/updateassignto', function (req, res) {
+    ticket.updateAssignee(req, res);
+  });
+  app.post('/getassignee', function (req, res) {
+    ticket.getAssignee(req, res);
+  });
 };

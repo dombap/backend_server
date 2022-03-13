@@ -22,8 +22,12 @@ var employee = {
           var lastName = req.body.lastName;
           var email = req.body.email;
           var password = req.body.password;
-          var paramsArray = [firstName,lastName,email,password];
-          var sql = " INSERT INTO emp_details (firstName,lastName,email,password) VALUES(?,?,?,?)"
+          var address = req.body.address;
+          var pincode = req.body.pincode;
+          var mobile = req.body.mobile;
+          var gender = req.body.gender;
+          var paramsArray = [firstName,lastName,email,password,address,pincode,mobile,gender];
+          var sql = " INSERT INTO emp_details (firstName,lastName,email,password,address,pincode,mobile,gender) VALUES(?,?,?,?,?,?,?,?)"
           conn.query(sql, paramsArray, function (err, rows) {
             if (err) {
               res.status(400).json(err);
@@ -53,5 +57,47 @@ var employee = {
         });
       })
   },
+  deleteEmployee: function (req, res) {
+    console.log('deleteEmployee----');
+    pool.getConnection(function (err, conn) {    
+      if (err) res.status(400);
+      var id = req.body.deleteId;
+      console.log('id---',id);
+      var sql = "DELETE FROM emp_details WHERE  id= ?";
+      conn.query(sql, id, function (err, rows) {
+        if (err) {
+          res.status(400).json(err);
+        } else {
+          res.status(200).json(rows);
+        }
+      });
+    })
+  },
+  updateEmployee: function (req, res) {
+    console.log(' req.body----', req.body);
+  pool.getConnection(function (err, conn) {    
+    if (err) res.status(400);
+    var firstName = req.body.firstName;
+    var lastName= req.body.lastName;
+    var email= req.body.email;
+    var password= req.body.password;
+    var pincode = req.body.pincode;
+    var mobile= req.body.mobile;
+    var gender= req.body.gender;
+    var address= req.body.address;
+    var id = req.body.id;
+    var paramsArray = [firstName,lastName,email,password,address,pincode,mobile,gender,id];
+    console.log('paramsArray----',paramsArray);
+    
+    var sql = "UPDATE emp_details SET `firstName`=?,`lastName`=?,`email`=?,`password`=?,`address`=?,`pincode`=?,`mobile`=?,`gender`=? WHERE `id`=?";
+    conn.query(sql, paramsArray, function (err, rows) {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        res.status(200).json(rows);
+      }
+    });
+  })
+  }
 }
 module.exports = employee;
