@@ -1,0 +1,16 @@
+'use strict';
+var asset = require('../../models/asset/asset_api');
+module.exports = function (app, database) {
+  app.get('/getassets', function (req, res) {
+    asset.getAssetList(req, res);
+  });
+  app.post('/addasset', function (req, res) {
+    asset.addAsset(req, res);
+  });
+  app.post('/delasset', function (req, res) {
+    asset.deleteAsset(req, res);
+  });
+  app.put('/updateasset', function (req, res) {
+    asset.updateasset(req, res);
+  });
+};

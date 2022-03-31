@@ -1,0 +1,89 @@
+'use strict';
+var pool = require('./../../config/db_config');
+
+var asset = {
+    getAssetList: function (req, res) {
+        pool.getConnection(function (err, conn) {
+          if (err) res.status(400);
+          var sql = "select * from asset_details";
+          conn.query(sql,function (err, rows) {
+            if (err) {
+              res.status(400).json(err);
+            } else {
+              res.status(200).json(rows);
+            }
+          });
+        });
+      },
+      addAsset: function (req, res) {
+        pool.getConnection(function (err, conn) {    
+          if (err) res.status(400);
+          var assetType = req.body.assetType;
+          var assetNumber = req.body.assetNumber;
+          var assignTo = req.body.assignTo;
+          var paramsArray = [assetType,assetNumber,assignTo];
+          var sql = " INSERT INTO asset_details (asset_type,asset_number,assign_to) VALUES(?,?,?)"
+          conn.query(sql, paramsArray, function (err, rows) {
+            if (err) {
+              res.status(400).json(err);
+            } else {
+              res.status(200).json(rows);
+            }
+          });
+        })
+    },
+  deleteAsset: function (req, res) {
+    pool.getConnection(function (err, conn) {    
+      if (err) res.status(400);
+      var id = req.body.deleteId;
+      var sql = "DELETE FROM asset_details WHERE  id= ?";
+      conn.query(sql, id, function (err, rows) {
+        if (err) {
+          res.status(400).json(err);
+        } else {
+          res.status(200).json(rows);
+        }
+      });
+    })
+  },
+  updateAsset: function (req, res) {
+    console.log(' req.body----', req.body);
+  pool.getConnection(function (err, conn) {    
+    if (err) res.status(400);
+    var assetType = req.body.assetType;
+    var assetNumber = req.body.assetNumber;
+    var assignTo = req.body.assignTo;
+    var id = req.body.id;
+    var paramsArray = [assetType,assetNumber,assignTo,id];
+    console.log('paramsArray----',paramsArray);
+    
+    var sql = "UPDATE emp_details SET `asset_type`=?,`asset_number`=? WHERE `id`=?";
+    conn.query(sql, paramsArray, function (err, rows) {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        res.status(200).json(rows);
+      }
+    });
+  })
+  },
+  updateAssignee: function (req, res) {
+  pool.getConnection(function (err, conn) {    
+    if (err) res.status(400);
+    var assignee = req.body.assignTo.id;
+    var id = req.body.id;
+    var paramsArray = [assignee,id];
+    console.log('paramsArray----',paramsArray);
+    
+    var sql = "UPDATE ticket_details SET `assign_to`=? WHERE `id`=?";
+    conn.query(sql, paramsArray, function (err, rows) {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        res.status(200).json(rows);
+      }
+    });
+  })
+  },
+}
+module.exports = asset;
