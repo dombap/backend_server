@@ -50,14 +50,13 @@ var asset = {
     console.log(' req.body----', req.body);
   pool.getConnection(function (err, conn) {    
     if (err) res.status(400);
-    var assetType = req.body.assetType;
-    var assetNumber = req.body.assetNumber;
-    var assignTo = req.body.assignTo;
+    var assetType = req.body.type.type;
+    var assetNumber = req.body.number;
     var id = req.body.id;
-    var paramsArray = [assetType,assetNumber,assignTo,id];
+    var paramsArray = [assetType,assetNumber,id];
     console.log('paramsArray----',paramsArray);
     
-    var sql = "UPDATE emp_details SET `asset_type`=?,`asset_number`=? WHERE `id`=?";
+    var sql = "UPDATE asset_details SET `asset_type`=?,`asset_number`=? WHERE `id`=?";
     conn.query(sql, paramsArray, function (err, rows) {
       if (err) {
         res.status(400).json(err);

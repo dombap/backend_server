@@ -18,5 +18,7 @@ module.exports = function (app, database) {
   app.put('/updateemployee', function (req, res) {
     employee.updateEmployee(req, res);
   });
-
+  app.post('/sendmail', function (req, res) {
+    employee.sendMail(req, res);
+  });
 };

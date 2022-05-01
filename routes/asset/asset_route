@@ -11,6 +11,6 @@ module.exports = function (app, database) {
     asset.deleteAsset(req, res);
   });
   app.put('/updateasset', function (req, res) {
-    asset.updateasset(req, res);
+    asset.updateAsset(req, res);
   });
 };

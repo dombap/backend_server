@@ -1,5 +1,14 @@
 'use strict';
 var pool = require('./../../config/db_config');
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'aparnadomb3933@gmail.com',
+    pass: 'erotpsojeuoibneg'
+  }
+});
+
 
 var employee = {
     getEmployeeList: function (req, res) {
@@ -98,6 +107,27 @@ var employee = {
       }
     });
   })
+  },
+  sendMail: function (req, res) {
+    pool.getConnection(function (err, conn) {    
+      if (err) res.status(400);
+      var mailOptions = {
+        from: 'aparnadomb3933@gmail.com',
+        to: req.body.email,
+        subject: 'Thank you for getting in touch!',
+        html: `Hello ${req.body.firstName}&nbsp;${req.body.lastName},<br><b><i>Thank you for getting in touch!</i></b> <br><p>We appreciate you contacting us. We will get back in touch with you soon! Have a great day!</p><br>Thanks.`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          return info.response;
+         
+        }
+      });
+    })
   }
 }
 module.exports = employee;
